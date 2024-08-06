@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import MenuItem from './MenuItem';
 import useRegisterModal from '@/app/hooks/useRegisterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
-import useRentModal from '@/app/hooks/useRentModal'; // Assurez-vous de l'import correct
+import useRentModal from '@/app/hooks/useRentModal'; 
 import { signOut } from 'next-auth/react';
 import { SafeUser } from '@/app/types';
 import { useRouter } from 'next/navigation';
@@ -17,7 +17,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
     const router = useRouter();
     const registerModal = useRegisterModal();
     const loginModal = useLoginModal();
-    const rentModal = useRentModal(); // Assurez-vous que useRentModal est correctement initialisé
+    const rentModal = useRentModal(); 
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -27,9 +27,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 
     const onRent = useCallback(() => {
         if (!currentUser) {
-            return loginModal.onOpen(); // Utilisation de useLoginModal pour ouvrir la modal de connexion
+            return loginModal.onOpen(); // useLoginModal pour ouvrir la modal de connexion
         }
-        rentModal.onOpen(); // Utilisation de useRentModal pour ouvrir la modal de location
+        rentModal.onOpen(); // useRentModal pour ouvrir la modal de location
     }, [currentUser, loginModal, rentModal]);
 
     return (
@@ -56,6 +56,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                     <div className='flex flex-col cursor-pointer'>
                         {currentUser ? (
                             <>
+                                 <MenuItem onClick={() => {}} classn='text-green-700 uppercase' label={currentUser.name || 'Utilisateur'} />
                                 <MenuItem onClick={() => router.push('/profil')} label="Mon Profil" />
                                 <MenuItem onClick={() => router.push('/trips')} label="Mes voyages" />
                                 <MenuItem onClick={() => router.push('/favorites')} label="Mes favoris" />

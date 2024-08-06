@@ -101,10 +101,10 @@ const SearchModal = () => {
 
   const actionLabel = useMemo(() => {
     if (step === STEPS.INFO) {
-      return 'Search'
+      return 'Rechercher'
     }
 
-    return 'Next'
+    return 'Suivant'
   }, [step]);
 
   const secondaryActionLabel = useMemo(() => {
@@ -112,7 +112,7 @@ const SearchModal = () => {
       return undefined
     }
 
-    return 'Back'
+    return 'Retour'
   }, [step]);
 
   let bodyContent = (
@@ -156,8 +156,8 @@ const SearchModal = () => {
         <Counter 
           onChange={(value) => setGuestCount(value)}
           value={guestCount}
-          title="Invités" 
-          subtitle="Combien d’invités viennent ?"
+          title="Nombre de personnes" 
+          subtitle="Combien de personnes seront présentes ?"
         />
         <hr />
         <Counter 
@@ -182,7 +182,7 @@ const SearchModal = () => {
   return (
     <Modal
       isOpen={searchModal.isOpen}
-      title="Filters"
+      title="Appliquez vos filtres"
       actionLabel={actionLabel}
       onSubmit={onSubmit}
       secondaryActionLabel={secondaryActionLabel}

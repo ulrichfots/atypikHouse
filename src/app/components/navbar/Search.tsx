@@ -44,10 +44,10 @@ const Search = () => {
 
   const guestLabel = useMemo(() => {
     if (guestCount) {
-      return `${guestCount} Invités`;
+      return `${guestCount} Personnes`;
     }
 
-    return 'Ajouter des invités';
+    return 'Nombre de personnes';
   }, [guestCount]);
 
   return ( 
@@ -58,7 +58,7 @@ const Search = () => {
         w-full 
         md:w-auto 
         py-2 
-        rounded-full 
+        rounded
         shadow-sm 
         hover:shadow-md 
         transition 
@@ -110,7 +110,7 @@ const Search = () => {
         >
           <div className="hidden sm:block">{guestLabel}</div>
           <div 
-            className="p-2 bg-rose-500 rounded-full text-white"
+            className="p-2 bg-green-600 rounded-full text-white"
           >
             <BiSearch size={18} />
           </div>
