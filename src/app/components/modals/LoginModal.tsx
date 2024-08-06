@@ -8,8 +8,8 @@ import {
   SubmitHandler, 
   useForm
 } from "react-hook-form";
-import { FcGoogle } from "react-icons/fc";
-import { AiFillGithub } from "react-icons/ai";
+// import { FcGoogle } from "react-icons/fc";
+// import { AiFillGithub } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 
 import useRegisterModal from "@/app/hooks/useRegisterModal";
@@ -52,7 +52,7 @@ const LoginModal = () => {
       setIsLoading(false);
 
       if (callback?.ok) {
-        toast.success('Logged in');
+        toast.success('Connecté avec succès');
         router.refresh();
         loginModal.onClose();
       }
@@ -71,7 +71,7 @@ const LoginModal = () => {
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading
-        title="Content de te revoir"
+        title="Nous sommes heureux de vous revoir"
         subtitle="Connectez-vous à votre compte!"
       />
       <Input
@@ -84,7 +84,7 @@ const LoginModal = () => {
       />
       <Input
         id="password"
-        label="Password"
+        label="Mot de passe"
         type="password"
         disabled={isLoading}
         register={register}
@@ -97,7 +97,7 @@ const LoginModal = () => {
   const footerContent = (
     <div className="flex flex-col gap-4 mt-3">
       <hr />
-      <Button 
+      {/* <Button 
         outline 
         label="Continue avec Google"
         icon={FcGoogle}
@@ -108,14 +108,16 @@ const LoginModal = () => {
         label="Continue avec Github"
         icon={AiFillGithub}
         onClick={() => signIn('github')}
-      />
+      /> */}
       <div className="
       text-neutral-500 text-center mt-4 font-light">
         <p>Vous utilisez Atipyk House pour la première fois ?
           <span 
             onClick={onToggle} 
             className="
-              text-neutral-800
+              text-neutral-900
+              hover:underline
+              font-semibold
               cursor-pointer 
               hover:underline
             "
@@ -129,7 +131,7 @@ const LoginModal = () => {
     <Modal
       disabled={isLoading}
       isOpen={loginModal.isOpen}
-      title="Login"
+      title="Connexion"
       actionLabel="Continue"
       onClose={loginModal.onClose}
       onSubmit={handleSubmit(onSubmit)}

@@ -7,6 +7,7 @@ import useCountries from '@/app/hooks/useCountries';
 export type CountrySelectValue = {
   flag: string;
   label: string;
+  translation: string;
   latlng: number[],
   region: string;
   value: string
@@ -26,7 +27,7 @@ const CountrySelect: React.FC<CountrySelectProps> = ({
   return ( 
     <div>
       <Select
-        placeholder="Anywhere"
+        placeholder="Choisissez votre destination"
         isClearable
         options={getAll()}
         value={value}

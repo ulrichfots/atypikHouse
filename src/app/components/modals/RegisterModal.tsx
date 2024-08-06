@@ -1,8 +1,8 @@
 'use client';
 
 import axios from "axios";
-import { AiFillGithub } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
+// import { AiFillGithub } from "react-icons/ai";
+// import { FcGoogle } from "react-icons/fc";
 import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
@@ -42,14 +42,14 @@ const RegisterModal = () => {
         })
     }
     const onToggle = useCallback(() => {
-        loginModal.onClose();
-        registerModal.onOpen();
+        loginModal.onOpen();
+        registerModal.onClose();
       }, [loginModal, registerModal])
    
     const bodyContent = (
         <div className="flex flex-col gap-4">
             <Heading 
-            title="Bienvenu sur Atipyk house" subtitle="Creer votre compte"/>
+            title="Bienvenu sur Atipyk House" subtitle="Créer votre compte"/>
             <Input 
             id="email" 
             label="Email" 
@@ -83,12 +83,12 @@ const RegisterModal = () => {
     const footerContent = (
         <div className="flex flex-col gap-4 mt-3">
             <hr />
-            <Button outline label="Continuer avec Google" icon={FcGoogle} onClick={() => signIn('google')}/>
-            <Button outline label="Continuer avec Github" icon={AiFillGithub} onClick={() => signIn('github')}/>
+            {/* <Button outline label="Continuer avec Google" icon={FcGoogle} onClick={() => signIn('google')}/>
+            <Button outline label="Continuer avec Github" icon={AiFillGithub} onClick={() => signIn('github')}/> */}
             <div className="text-neutral-500 text-center mt-4 font-light">
                 <div className="justify-center flex flex-row items-center gap-2">
                     <div>Vous avez déja un compte ?</div>
-                    <div onClick={onToggle} className="text-neutral-800 cursor-pointer hover:underline">Se connecter</div>
+                    <div onClick={onToggle} className="text-neutral-900 hover:underline font-semibold cursor-pointer hover:underline">Se connecter</div>
                 </div>
             </div>
         </div>
@@ -97,7 +97,7 @@ const RegisterModal = () => {
         <Modal disabled={isLoading} 
         isOpen={registerModal.isOpen} 
         title="Inscription" 
-        actionLabel="Continuer" 
+        actionLabel="S'inscrire" 
         onClose={registerModal.onClose} 
         onSubmit={handleSubmit(onSubmit)}
         body={bodyContent}
