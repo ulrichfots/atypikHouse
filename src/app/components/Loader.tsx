@@ -1,6 +1,6 @@
 'use client';
 
-import { PuffLoader } from "react-spinners";
+import { GridLoader } from "react-spinners";
 
 const Loader = () => {
   return ( 
@@ -13,9 +13,9 @@ const Loader = () => {
       items-center 
     "
     >
-      <PuffLoader
-        size={100}
-        color="red"
+      <GridLoader
+        size={16}
+        color="green"
       />
     </div>
    );

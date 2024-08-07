@@ -4,13 +4,13 @@ import bcrypt from 'bcrypt';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
+    return res.status(405).json({ message: 'Méthode Non Autorisée' });
   }
 
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
-    return res.status(400).json({ message: 'Missing required fields' });
+    return res.status(400).json({ message: 'Champs obligatoires manquants' });
   }
 
   try {
@@ -25,6 +25,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
     res.status(201).json(manager);
   } catch (error) {
-    res.status(500).json({ message: 'Failed to create manager', error });
+    res.status(500).json({ message: 'Création impossible', error });
   }
 }

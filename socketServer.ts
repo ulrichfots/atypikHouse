@@ -41,7 +41,7 @@ io.on("connection", (socket: Socket) => {
     if (receiver) {
       io.to(receiver.socketId).emit("getMessage", data);
     } else {
-      console.log(`User not found: ${receiverId}`);
+      console.log(`Utilisateur non trouvé: ${receiverId}`);
     }
   });
 
