@@ -132,7 +132,7 @@ const LoginModal = () => {
       disabled={isLoading}
       isOpen={loginModal.isOpen}
       title="Connexion"
-      actionLabel="Continue"
+      actionLabel="Se connecter"
       onClose={loginModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}

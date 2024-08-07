@@ -97,11 +97,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@/app/components/Button';
+import ImageUpload from '@/app/components/Inputs/ImageUpload';
 
 const EditProfilePage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [image, setImage] = useState('');
+  // const [image, setImage] = useState('');
+  const [imageSrc, setImageSrc] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -110,7 +112,7 @@ const EditProfilePage = () => {
       const userData = await response.json();
       setName(userData.name || '');
       setEmail(userData.email || '');
-      setImage(userData.image || '');
+      setImageSrc(userData.image || '');
     };
     fetchUser();
   }, []);
@@ -120,7 +122,7 @@ const EditProfilePage = () => {
     const response = await fetch('/api/profile', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, image }),
+      body: JSON.stringify({ name, email, image: imageSrc }),
     });
     if (response.ok) {
       router.push('/profil');
@@ -131,7 +133,7 @@ const EditProfilePage = () => {
   };
 
   return (
-    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 outline-none">
+    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto inset-0 outline-none">
       <div className="relative w-full md:w-4/6 lg:w-3/6 xl:w-2/5 my-6 mx-auto h-full lg:h-auto md:h-auto">
         
         <div className="container mx-auto p-4">
@@ -157,17 +159,13 @@ const EditProfilePage = () => {
                 className="w-full px-3 py-2 border rounded"
               />
             </div>
-        
-            {/* <div>
-              <label htmlFor="image" className="block">URL de l'image</label>
-              <input
-                type="text"
-                id="image"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                className="w-full px-3 py-2 border rounded"
+            <div>
+              <label className="block">Image de profil</label>
+              <ImageUpload
+                onChange={(value) => setImageSrc(value)}
+                value={imageSrc}
               />
-            </div> */}
+            </div>
             <Button 
               label="Enregistrer les modifications"
               onClick={(e) => {
@@ -177,20 +175,13 @@ const EditProfilePage = () => {
             />
           </form>
 
-          
+          <div className="flex flex-col gap-2 py-3">
+            <div className="flex flex-row items-center gap-4 w-full">
+              <Button label="Annuler" outline onClick={goback} />
+              <Button label="Changer le mot de passe" onClick={() => router.push('/profil/change-password')} />
+            </div>
+          </div>
 
-
-
-                  <div className="flex flex-col gap-2 py-3">
-                  <div className="flex flex-row items-center gap-4 w-full">
-                    <Button label="Annuler" outline onClick={goback} />
-                    <Button label="Changer le mot de passe" onClick={() => router.push('/profil/change-password')} />
-                  </div>
-                </div>
-
-          {/* <div className="space-y-4">
-            <Button label="Changer le mot de passe" onClick={() => router.push('/profil/change-password')} />
-          </div> */}
         </div>
       </div>
     </div>

@@ -68,7 +68,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                                 {/* <MenuItem onClick={() => router.push('/loggerants')} label="login" /> */}
                                 
                                 <hr />
-                                <MenuItem onClick={() => signOut()} label="Se deconnecter" />
+                                <MenuItem  onClick={() => signOut({ callbackUrl: '/' })} label="Se déconnecter" />
                             </>
                         ) : (
                             <>
