@@ -1,6 +1,6 @@
 import { AiOutlineMenu } from 'react-icons/ai';
 import Avatar from '../Avatar';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import MenuItem from './MenuItem';
 import useRegisterModal from '@/app/hooks/useRegisterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
@@ -8,6 +8,7 @@ import useRentModal from '@/app/hooks/useRentModal';
 import { signOut } from 'next-auth/react';
 import { SafeUser } from '@/app/types';
 import { useRouter } from 'next/navigation';
+import React from 'react';
 
 interface UserMenuProps {
     currentUser?: SafeUser | null;
@@ -27,13 +28,26 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 
     const onRent = useCallback(() => {
         if (!currentUser) {
-            return loginModal.onOpen(); // useLoginModal pour ouvrir la modal de connexion
+            return loginModal.onOpen();
         }
-        rentModal.onOpen(); // useRentModal pour ouvrir la modal de location
+        rentModal.onOpen();
     }, [currentUser, loginModal, rentModal]);
 
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        const target = event.target as Element;
+        if (!target.closest('.user-menu-container')) {
+          setIsOpen(false);
+        }
+      };
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, []);
+
     return (
-        <div className="relative">
+        <div className="relative user-menu-container">
             <div className="flex flex-row items-center gap-3">
                 <div
                     onClick={onRent}
@@ -43,6 +57,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                 </div>
                 <div
                     onClick={toggleOpen}
+                    aria-expanded={isOpen}
+                    aria-haspopup="true"
+                    role="button"
                     className="p-4 md:py-1 md:px-2 border-[1px] border-neutral-200 flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
                 >
                     <AiOutlineMenu />
@@ -56,19 +73,16 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                     <div className='flex flex-col cursor-pointer'>
                         {currentUser ? (
                             <>
-                                 <MenuItem onClick={() => {}} classn='text-green-700 uppercase' label={currentUser.name || 'Utilisateur'} />
+                                <MenuItem onClick={() => {}} label={currentUser.name || 'Utilisateur'} />
                                 <MenuItem onClick={() => router.push('/profil')} label="Mon Profil" />
+                                <MenuItem onClick={() => router.push('/messages')} label="Mes Messages" />
                                 <MenuItem onClick={() => router.push('/trips')} label="Mes voyages" />
                                 <MenuItem onClick={() => router.push('/favorites')} label="Mes favoris" />
                                 <MenuItem onClick={() => router.push('/reservations')} label="Mes Réservations" /> 
                                 <MenuItem onClick={() => router.push('/properties')} label="Mes Annonces" />
                                 <MenuItem onClick={() => router.push('/history')} label="Historiques des Réservations" />
-                                {/* <MenuItem onClick={() => router.push('/dashboard')} label="Dashboard" /> */}
-                                {/* <MenuItem onClick={() => router.push('/gerants')} label="Gérants" /> */}
-                                {/* <MenuItem onClick={() => router.push('/loggerants')} label="login" /> */}
-                                
                                 <hr />
-                                <MenuItem  onClick={() => signOut({ callbackUrl: '/' })} label="Se déconnecter" />
+                                <MenuItem onClick={() => signOut({ callbackUrl: '/' })} label="Se déconnecter" />
                             </>
                         ) : (
                             <>
@@ -83,4 +97,4 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
     );
 };
 
-export default UserMenu;
+export default React.memo(UserMenu);

@@ -1,24 +1,28 @@
 'use client';
-
-import { SafeListing, SafeUser } from "@/app/types";
-import { Listing, Reservation } from "@prisma/client";
+import { useEffect, useState } from "react";
+import { SafeListing, SafeUser, SafeReservation } from "@/app/types";
 import { useRouter } from "next/navigation";
-import { useCallback, useMemo } from "react";
 import { format } from "date-fns";
 import Image from "next/image";
 import HeartButton from "../HeartButton";
 import Button from "../Button";
-import useCountries from "@/app/hooks/useCountries";
+import PayPalButton from "@/app/components/PayPalButton";
+
+interface LocationValue {
+    region?: string;
+    label?: string;
+}
 
 interface ListingCardProps {
-    data: SafeListing;
-    reservation?: Reservation;
+    data: SafeListing & { locationValue: LocationValue | string };
+    reservation?: SafeReservation;
     onAction?: (id: string) => void;
     disabled?: boolean;
     actionLabel?: string;
     actionId?: string;
     currentUser?: SafeUser | null;
 }
+
 const ListingCard: React.FC<ListingCardProps> = ({
     data,
     reservation,
@@ -29,32 +33,16 @@ const ListingCard: React.FC<ListingCardProps> = ({
     currentUser
 }) => {
     const router = useRouter();
-    const {getByValue} = useCountries();
 
-    const location = getByValue(data.locationValue);
-    const handleCancel = useCallback(
-        (e: React.MouseEvent<HTMLButtonElement>) => {
-            e.stopPropagation();
-            if (disabled) {
-                return;
-            }
-            onAction?.(actionId);
-        }, [onAction, actionId, disabled]
-    );
-    const price = useMemo(() => {
-        if (reservation) {
-            return reservation.totalPrice;
-        }
-        return data.price;
-    }, [reservation, data.price]);
-    const reservationDate = useMemo(() => {
-        if (!reservation) {
-            return null;
-        }
-        const start = new Date(reservation.startDate);
-        const end = new Date(reservation.endDate);
-        return `${format(start, "PP")} - ${format(end, "PP")}`;
-    }, [reservation]);
+    const location = typeof data.locationValue === 'object' && data.locationValue !== null && 'region' in data.locationValue
+        ? `${(data.locationValue as LocationValue).region}, ${(data.locationValue as LocationValue).label}`
+        : data.locationValue as string;
+
+    const reservationDate = reservation
+        ? `${format(new Date(reservation.startDate), "PP")} - ${format(new Date(reservation.endDate), "PP")}`
+        : data.category;
+
+    const price = reservation ? reservation.totalPrice : data.price;
 
     return (
         <div
@@ -76,17 +64,15 @@ const ListingCard: React.FC<ListingCardProps> = ({
                     </div>
                 </div>
                 <div className="font-semibold text-lg">
-                    {location?.region}, {location?.label}
+                    {location}
                 </div>
                 <div className="font-light text-neutral-500">
-                    {reservationDate || data.category}
+                    {reservationDate}
                 </div>
                 <div className="flex flex-row items-center gap-1">
-                    <div className="font-semibold">€ {price}
-                        
-                    </div>
+                    <div className="font-semibold">€ {price}</div>
                     {!reservation && (
-                        <div className="font-light">Nuit</div>
+                        <div className="font-light">/Nuit</div>
                     )}
                 </div>
                 {onAction && actionLabel && (
@@ -94,11 +80,21 @@ const ListingCard: React.FC<ListingCardProps> = ({
                       disabled={disabled}
                       small
                       label={actionLabel}
-                      onClick={handleCancel}
+                      onClick={(e) => {
+                          e.stopPropagation();
+                          onAction(actionId);
+                      }}
                     />
                 )}
+                {reservation && (
+                    <div className="mt-2">
+                        <PayPalButton
+                            totalPrice={reservation.totalPrice}
+                            reservationId={reservation.id}
+                        />
+                    </div>
+                )}
             </div>
-
         </div>
     );
 }

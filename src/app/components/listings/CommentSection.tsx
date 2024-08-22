@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Importer useRouter pour la navigation
 import axios from 'axios';
 import { SafeUser } from '@/app/types';
 import Avatar from '@/app/components/Avatar';
@@ -11,6 +12,7 @@ interface CommentSectionProps {
   currentUser?: SafeUser | null;
   comments: Comment[];
   setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
+  user?: SafeUser; // user peut être undefined
 }
 
 interface Comment {
@@ -24,9 +26,11 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   listingId, 
   currentUser, 
   comments,
-  setComments 
+  setComments,
+  user // Recevoir user comme prop
 }) => {
   const [newComment, setNewComment] = useState('');
+  const router = useRouter();
 
   const handleSubmitComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,6 +43,11 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     } catch (error) {
       console.error('Error posting comment:', error);
     }
+  };
+
+  const handleContactClick = () => {
+    if (!currentUser) return;
+    router.push(`/messages?6698ca3ed913336b67daa635=${currentUser.id}`);
   };
 
   return (
@@ -56,6 +65,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           </div>
         ))}
       </div>
+      
       {currentUser && (
         <form onSubmit={handleSubmitComment} className="mt-6">
           <textarea
@@ -72,10 +82,18 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           />
         </form>
       )}
+
+      {/* Vérification que user est défini avant d'afficher le bouton */}
+      {/* {currentUser && user?.id && currentUser.id !== user.id && ( */}
+        <div className="mt-6">
+          <Button 
+            label="Laissez-moi un message" 
+            onClick={handleContactClick} 
+          />
+        </div>
+      
     </div>
   );
 };
 
 export default CommentSection;
-
-

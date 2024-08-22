@@ -1,4 +1,4 @@
-// src/pages/api/user/profile.ts
+
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import prisma from '@/app/libs/prismadb';

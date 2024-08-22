@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Generate and return a token or session if needed (this is a simple example)
+    // L'utilisateur est authentifié
     return res.status(200).json({ message: 'Login successful', user });
   } catch (error) {
     console.error(error);

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '@/app/libs/prisma'; // Ajustez le chemin en fonction de votre structure de projet
+import prisma from '@/app/libs/prisma';
 import bcrypt from 'bcrypt';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

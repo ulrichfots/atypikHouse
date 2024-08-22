@@ -1,7 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    reactStrictMode: true,
+    swcMinify: true,
     experimental: {
-        appDir: true,
+        // appDir: true,
+    },
+    pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
+    rewrites: async () => {
+        return [
+            {
+                source: "/api/:path*",
+                destination: "http://localhost:3000/api/:path*",
+            },
+        ];
     },
     images: {
         domains: [
@@ -23,6 +34,5 @@ const nextConfig = {
 
         return config;
     },
-}
-
+};
 export default nextConfig;
