@@ -1,5 +1,6 @@
 [build]
   command = "npm run build"
+  publish = "build"
 
-[[plugins]]
-  package = "@netlify/plugin-prisma-provider"
+[context.production.environment]
+  DATABASE_URL = "mongodb+srv://ulrichfotso10:atypik-house@cluster.jrzsy2t.mongodb.net/atypik-house"
