@@ -1,7 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/app/libs/prisma';
-import bcrypt from 'bcrypt';
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Méthode Non Autorisée' });
@@ -14,6 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    const bcrypt = require('bcrypt');
     const hashedPassword = await bcrypt.hash(password, 10);
     const manager = await prisma.user.create({
       data: {
