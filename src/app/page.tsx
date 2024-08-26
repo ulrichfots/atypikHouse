@@ -5,18 +5,13 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import axios from "axios";
 import ClientOnly from "./components/ClientOnly";
 
-interface HomeProps {
-  searchParams: any;
-}
-
-const Home = async ({ searchParams }: HomeProps) => {
+const Home = async () => {
   let listings = [];
   let currentUser = null;
 
   try {
-    const response = await axios.get(`${process.env.DATABASE_URL}/api/listings`, {
-      params: searchParams,
-    });
+    // Fetch listings without using searchParams, assuming all listings are required
+    const response = await axios.get(`${process.env.DATABASE_URL}/api/listings`);
     listings = response.data;
   } catch (error) {
     console.error("Failed to fetch listings", error);
