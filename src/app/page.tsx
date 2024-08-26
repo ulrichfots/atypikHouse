@@ -1,27 +1,20 @@
 import Container from "@/app/components/Container";
 import EmptyState from "@/app/components/EmptyState";
-import ListingCard from "./components/listings/ListingCard";
+
+import getListings, { 
+  IListingsParams
+} from "@/app/actions/getListings";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import axios from "axios";
 import ClientOnly from "./components/ClientOnly";
+import ListingCard from "./components/listings/ListingCard";
 
-const Home = async () => {
-  let listings = [];
-  let currentUser = null;
+interface HomeProps {
+  searchParams: IListingsParams
+};
 
-  try {
-    // Fetch listings without using searchParams, assuming all listings are required
-    const response = await axios.get(`${process.env.DATABASE_URL}/api/listings`);
-    listings = response.data;
-  } catch (error) {
-    console.error("Failed to fetch listings", error);
-  }
-
-  try {
-    currentUser = await getCurrentUser();
-  } catch (error) {
-    console.error("Failed to fetch current user", error);
-  }
+const Home = async ({ searchParams }: HomeProps) => {
+  const listings = await getListings(searchParams);
+  const currentUser = await getCurrentUser();
 
   if (listings.length === 0) {
     return (
@@ -34,7 +27,7 @@ const Home = async () => {
   return (
     <ClientOnly>
       <Container>
-        <div
+        <div 
           className="
             pt-24
             grid 
@@ -47,7 +40,7 @@ const Home = async () => {
             gap-8
           "
         >
-          {listings.map((listing: any) => (
+          {listings.map((listing) => (
             <ListingCard
               currentUser={currentUser}
               key={listing.id}
@@ -57,7 +50,7 @@ const Home = async () => {
         </div>
       </Container>
     </ClientOnly>
-  );
-};
+  )
+}
 
 export default Home;
