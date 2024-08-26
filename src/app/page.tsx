@@ -1,18 +1,33 @@
-"use client";
-import { useEffect, useState } from "react";
 import Container from "@/app/components/Container";
 import EmptyState from "@/app/components/EmptyState";
-import ClientOnly from "./components/ClientOnly";
 import ListingCard from "./components/listings/ListingCard";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import axios from "axios";
+import ClientOnly from "./components/ClientOnly";
 
 interface HomeProps {
-  listings: any[];
-  currentUser: any;
+  searchParams: any;
 }
 
-const Home: React.FC<HomeProps> = ({ listings, currentUser }) => {
+const Home = async ({ searchParams }: HomeProps) => {
+  let listings = [];
+  let currentUser = null;
+
+  try {
+    const response = await axios.get(`${process.env.DATABASE_URL}/api/listings`, {
+      params: searchParams,
+    });
+    listings = response.data;
+  } catch (error) {
+    console.error("Failed to fetch listings", error);
+  }
+
+  try {
+    currentUser = await getCurrentUser();
+  } catch (error) {
+    console.error("Failed to fetch current user", error);
+  }
+
   if (listings.length === 0) {
     return (
       <ClientOnly>
@@ -37,7 +52,7 @@ const Home: React.FC<HomeProps> = ({ listings, currentUser }) => {
             gap-8
           "
         >
-          {listings.map((listing) => (
+          {listings.map((listing: any) => (
             <ListingCard
               currentUser={currentUser}
               key={listing.id}
@@ -51,32 +66,3 @@ const Home: React.FC<HomeProps> = ({ listings, currentUser }) => {
 };
 
 export default Home;
-
-export async function getServerSideProps(context: any) {
-  const searchParams = context.query;
-
-  let listings = [];
-  let currentUser = null;
-
-  try {
-    const response = await axios.get(`${process.env.DATABASE_URL}/api/listings`, {
-      params: searchParams,
-    });
-    listings = response.data;
-  } catch (error) {
-    console.error("Failed to fetch listings", error);
-  }
-
-  try {
-    currentUser = await getCurrentUser();
-  } catch (error) {
-    console.error("Failed to fetch current user", error);
-  }
-
-  return {
-    props: {
-      listings,
-      currentUser,
-    },
-  };
-}
