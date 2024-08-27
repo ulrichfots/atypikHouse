@@ -88,7 +88,7 @@ model Message {
   content         String
   senderId        String       @db.ObjectId
   receiverId      String       @db.ObjectId
-  chatId          String       @db.ObjectId       // Ajout du champ chatId pour la relation avec Chat
+  chatId          String       @db.ObjectId      
   createdAt       DateTime     @default(now())
   isDelivered     Boolean      @default(false)
   isRead          Boolean      @default(false)

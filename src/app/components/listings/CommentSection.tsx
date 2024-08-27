@@ -76,14 +76,13 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         </form>
       )}
 
-      {currentUser && user?.id && currentUser.id !== user.id && (
+      {/* {currentUser && user?.id && currentUser.id !== user.id && ( */}
         <div className="mt-6">
           <Button 
             label="Laissez-moi un message" 
             onClick={handleContactClick} 
           />
         </div>
-      )}
     </div>
   );
 };
