@@ -13,6 +13,7 @@ interface CommentSectionProps {
   comments: SafeComment[];
   setComments: React.Dispatch<React.SetStateAction<SafeComment[]>>;
   user?: SafeUser;
+  listingUserId: string;
 }
 
 const CommentSection: React.FC<CommentSectionProps> = ({ 
@@ -20,7 +21,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   currentUser, 
   comments,
   setComments,
-  user 
+  user,
+  listingUserId
 }) => {
   const [newComment, setNewComment] = useState('');
   const router = useRouter();
@@ -40,7 +42,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 
   const handleContactClick = () => {
     if (!currentUser) return;
-    router.push(`/messages?userId=${currentUser.id}`);
+    router.push(`/messages?listingUserId=${listingUserId}`);
   };
 
   return (
@@ -76,15 +78,15 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         </form>
       )}
 
-      {/* {currentUser && user?.id && currentUser.id !== user.id && ( */}
+      {/* {currentUser && user?.id && listingUserId === user.id && ( */}
         <div className="mt-6">
           <Button 
             label="Laissez-moi un message" 
             onClick={handleContactClick} 
           />
         </div>
+  
     </div>
-  );
-};
-
+    );
+  };
 export default CommentSection;

@@ -18,16 +18,34 @@ const MessagesPage = () => {
   const router = useRouter();
 
   useEffect(() => {
+
+    const params = new URLSearchParams(window.location.search);
+    const listingUserId = params.get('listingUserId');
+    // console.log('listingUserId:', listingUserId);
+    
     const fetchUsers = async () => {
       try {
         const response = await axios.get('/api/users');
         setUsers(response.data);
+        console.log('Users:', response.data);
+        console.log('1.listingUserId:', listingUserId);
+        if (listingUserId) {
+          console.log('2.listingUserId:', listingUserId);
+          const listingUser = response.data.find((user: any) => user.id === listingUserId) as User;
+          console.log('listingUser:', listingUser);
+          setSelectedUser(listingUser)
+        }
+
       } catch (error) {
         console.error('Erreur lors de la récupération des utilisateurs:', error);
       }
     };
 
     fetchUsers();
+    // if (listingUserId) {
+    //   const listingUser = users.find((user) => user.id === listingUserId) as User;
+    //   setSelectedUser(listingUser)
+    // }
   }, []);
 
   const handleUserSelect = (user: User) => {
