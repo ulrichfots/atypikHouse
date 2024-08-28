@@ -2,15 +2,17 @@ import Container from "@/app/components/Container";
 import EmptyState from "@/app/components/EmptyState";
 import getListings, { IListingsParams } from "@/app/actions/getListings";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import ClientOnly from "./components/ClientOnly";
-import ListingCard from "./components/listings/ListingCard";
+import ClientOnly from "@/app/components/ClientOnly";
+import ListingCard from "@/app/components/listings/ListingCard";
 
 interface HomeProps {
-  listings: any[];
-  currentUser: any;
+  searchParams: IListingsParams;
 }
 
-const Home = ({ listings, currentUser }: HomeProps) => {
+const Home = async ({ searchParams }: HomeProps) => {
+  const listings = await getListings(searchParams);
+  const currentUser = await getCurrentUser();
+
   if (listings.length === 0) {
     return (
       <ClientOnly>
@@ -46,36 +48,6 @@ const Home = ({ listings, currentUser }: HomeProps) => {
       </Container>
     </ClientOnly>
   );
-};
-
-export const getStaticPaths = async () => {
-  // Generate a list of paths that should be statically generated.
-  // You need to define the possible values of `searchParams` (e.g., `category`, `location`).
-  
-  const paths = [
-    {
-      params: { searchParams: { /* predefined params */ } }
-    },
-    // Add more paths as needed
-  ];
-
-  return {
-    paths,
-    fallback: true, // Set to 'blocking' or 'true' if you want to dynamically generate pages on first request
-  };
-};
-
-export const getStaticProps = async ({ params }: { params: { searchParams: IListingsParams } }) => {
-  const listings = await getListings(params.searchParams);
-  const currentUser = await getCurrentUser();
-
-  return {
-    props: {
-      listings,
-      currentUser,
-    },
-    revalidate: 10, // Re-generate the page at most once every 10 seconds
-  };
 };
 
 export default Home;
