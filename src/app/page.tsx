@@ -6,11 +6,13 @@ import ClientOnly from "@/app/components/ClientOnly";
 import ListingCard from "@/app/components/listings/ListingCard";
 
 interface HomeProps {
-  searchParams: IListingsParams;
+  listings: any[];
+  currentUser: any;
 }
 
-const Home = async ({ searchParams }: HomeProps) => {
-  const listings = await getListings(searchParams);
+export default async function Home() {
+  // Suppose you remove searchParams dependency and fetch all listings
+  const listings = await getListings({});
   const currentUser = await getCurrentUser();
 
   if (listings.length === 0) {
@@ -48,6 +50,4 @@ const Home = async ({ searchParams }: HomeProps) => {
       </Container>
     </ClientOnly>
   );
-};
-
-export default Home;
+}
